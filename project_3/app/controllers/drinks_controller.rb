@@ -86,9 +86,23 @@ class DrinksController < ApplicationController
 
   def adv_result
 
-  	# checked checkboxes (with same name) are passed automatically as an array 
-  	# concat the array with join to match the api search url
-  	search_term = params[:s].join("/and/")
+  	# if no checkedboxes are checked, redirect to advance search page with flash message
+    if params[:s] == nil
+      search_term = nil
+
+    # multiple checkboxes, join the array element ==> element1/and/element2/and/element3 to match the API call
+    elsif params[:s].length > 1
+      search_term = params[:s].join("/and/")
+
+    # only one checked, don't join the array
+    elsif params[:s].length == 1
+      search_term = params[:s][0]
+    end
+
+    if search_term == nil
+      flash[:danger] = "Please choose at least one ingredients"
+      redirect_to "/drinks/adv"
+    else
   	base_url = 'http://addb.absolutdrinks.com/drinks/with/' + search_term
   	response = RestClient.get base_url, {
   		:params => {
@@ -98,6 +112,7 @@ class DrinksController < ApplicationController
   		}
   	}
   	@drinks = JSON.parse(response)
+    end
   	# render json: @drinks
   end
 end

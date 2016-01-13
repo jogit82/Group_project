@@ -1,9 +1,12 @@
 <%= form_tag("/drinks/adv_result", method: "post") do %>
+<div class="well">
 	<h3>Spirits:</h3>
+	<ul>
 	<% @spirits.each do |s| %>
-	<%= check_box_tag('s[]', s) %>
-	<%= label_tag(:s, s) %>
+	<li style="display: inline-block"><%= check_box_tag('s[]', s) %>
+	<%= label_tag(:s, s) %></li>
 	<% end %>
+	</ul>
 
 	<h3>Mixers:</h3>
 	<% @mixers.each do |s| %>
@@ -80,9 +83,10 @@
 
 	<h3>Others:</h3>
 	<% @others.each do |s| %>
-	<%= check_box_tag(s, s) %>
+	<%= check_box_tag('s[]', s) %>
 	<%= label_tag(:s, s) %>
 	<% end %>
 
 	<%= submit_tag("submit") %>
+	</div>
 <% end %>
